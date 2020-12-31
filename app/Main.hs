@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import SPFive ( query )
 
 main :: IO ()
-main = someFunc
+main = query

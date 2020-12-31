@@ -1,8 +1,24 @@
-module Lib
-    ( someFunc
-    ) where
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 
-import Token ( accessToken )
+module Lib where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Data.Aeson (FromJSON (..), ToJSON (..))
+import GHC.Generics (Generic)
+import Token as Lib ( accessToken )
+
+baseUrl :: String
+baseUrl = "https://sandbox.iexapis.com/stable"
+
+accessTokenParam :: String
+accessTokenParam = concat ["&token=", accessToken]
+
+data Quote = Quote
+  { symbol :: String,
+    companyName :: String,
+    marketCap :: Int,
+    open :: Double,
+    latestPrice :: Double
+  }
+  deriving (Show, Generic, ToJSON, FromJSON)
