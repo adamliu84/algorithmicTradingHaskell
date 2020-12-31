@@ -1,0 +1,4 @@
+module Token where
+
+accessToken :: String
+accessToken = "<UPDATE_TOKEN_HERE>"
