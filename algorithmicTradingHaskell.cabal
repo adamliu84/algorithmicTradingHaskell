@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 19524994b97232b92963a5c08ea3ef4aa51b368cb7b180bdbb604a66e7fad69b
+-- hash: 6825c83ec35e8087132869b9d94ebf56e1b828f1f886d8e3c9db52ab1b5b9fb9
 
 name:           algorithmicTradingHaskell
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Momentum
       SPFive
       Token
       Util

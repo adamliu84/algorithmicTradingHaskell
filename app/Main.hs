@@ -1,6 +1,8 @@
 module Main where
 
-import SPFive ( query )
+import qualified Momentum (query)
+import qualified SPFive (query)
 
 main :: IO ()
-main = query
+-- main = SPFive.query
+main = Momentum.query

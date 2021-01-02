@@ -5,8 +5,8 @@ module Util where
 import Data.Aeson (decode)
 import qualified Data.ByteString.Lazy.Char8 as LB
 import Data.Maybe (catMaybes, mapMaybe)
-import qualified Data.Text as T (drop, dropWhile, length, pack, replace, splitOn, take, unpack)
-import Lib (Quote)
+import qualified Data.Text as T (breakOn, concat, drop, dropWhile, length, pack, splitOn, take, unpack)
+import Lib (Quote, Stats, Stock)
 
 getConsituents :: IO [String]
 getConsituents = tail . takeWhile'' . lines <$> readFile "constituents.csv"
@@ -32,3 +32,15 @@ dirtyConverter str =
   where
     str' = T.pack $ LB.unpack str
     f' = LB.pack . T.unpack . T.drop 9 . T.dropWhile (/= '{')
+
+{-
+READLLY NEED TO correct this weird convertor
+-}
+dirtyConverter' :: LB.ByteString -> [Stock]
+dirtyConverter' str =
+  mapMaybe ((\x -> decode (LB.pack $ T.unpack x) :: Maybe Stock) . (\x -> T.concat [T.drop 1 $ snd $ T.breakOn ":" x, "}}"])) $
+    init $
+      T.splitOn "}}" $
+        T.drop 1 $ T.take (T.length str' - 1) str'
+  where
+    str' = T.pack $ LB.unpack str
