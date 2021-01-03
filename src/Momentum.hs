@@ -11,15 +11,9 @@ import Data.List (intercalate, sortBy)
 import Data.Maybe (mapMaybe)
 import GHC.Float (int2Double)
 import Lib (Stock, accessTokenParam, baseUrl, latestPrice, marketCap, month1ChangePercent, month3ChangePercent, month6ChangePercent, quote, stats, symbol, year1ChangePercent)
-import Network.HTTP.Client
-  ( Request (method),
-    Response (responseBody),
-    httpLbs,
-    newManager,
-    parseRequest,
-  )
+import Network.HTTP.Client (newManager)
 import Network.HTTP.Client.TLS (tlsManagerSettings)
-import Util (dirtyConverter, dirtyConverter', getConsituents, groupByTen)
+import Util (dirtyConverter, getConsituents, getiexapisData, groupByTen)
 
 tempPortfolioSize :: Double
 tempPortfolioSize = 10000000
@@ -47,15 +41,7 @@ query = do
     (return . concat)
       =<< forM
         batchSymbol
-        ( \x -> do
-            let x' = intercalate "," x
-            initialRequest <-
-              parseRequest $
-                concat [baseUrl, "/stock/market/batch/?types=stats,quote&symbols=", x', accessTokenParam]
-            let request = initialRequest {method = "GET"}
-            response <- httpLbs request manager
-            return $ dirtyConverter' $ responseBody response
-        )
+        (getiexapisData manager)
   let momentumStock = mapMaybe getTimePeriodPriceReturn stock
       result =
         map
